@@ -1,0 +1,13 @@
+#!/bin/sh -e
+FILES="kernel.img"
+
+for FN in $FILES; do
+  # Need to rm first to avoid error "rename involves overwriting ... with 
+  # different file ..., not allowed
+  rm -f /boot/$FN
+  dpkg-divert --package rpikernelhack --remove --rename /boot/$FN
+  sync
+done
+
+
+#DEBHELPER#

@@ -1,0 +1,13 @@
+Source: raspberrypi-linux
+Maintainer: Radek Pazdera <radek@kano.me>
+Section: kernel
+Priority: extra
+Standards-Version: 3.9.4
+Build-Depends: debhelper (>=9.0.0), quilt, gcc, make, perl
+
+Package: raspberrypi-linux
+Architecture: armhf
+Depends: ${shlibs:Depends}, ${misc:Depends}, libraspberrypi0
+Description: Linux Kernel for the Raspberry Pi
+ This package contains the Linux kernel compiled and optimised to run on
+ the Raspberry Pi board.
