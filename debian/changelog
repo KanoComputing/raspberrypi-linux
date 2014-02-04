@@ -1,3 +1,15 @@
+raspberrypi-linux (3.12.9-3) unstable; urgency=low
+
+  * Putting the kernel hack back in place.
+
+ -- Radek Pazdera <radek@kano.me>  Fri, 7 Feb 2014 15:31:26 +0000
+
+raspberrypi-linux (3.12.9-2) unstable; urgency=low
+
+  * Adding BFS.
+
+ -- Radek Pazdera <radek@kano.me>  Thu, 6 Feb 2014 18:26:14 +0000
+
 raspberrypi-linux (3.12.9-1) unstable; urgency=low
 
   * Initial release.
