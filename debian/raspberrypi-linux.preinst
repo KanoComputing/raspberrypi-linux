@@ -1,5 +1,6 @@
 #!/bin/sh -e
-FILES="kernel.img"
+KERNELRELEASE="#KERNEL_RELEASE#"
+FILES="kernel-$KERNELRELEASE config-$KERNELRELEASE System.map-$KERNELRELEASE"
 
 # dpkg-divert will error out otherwise
 mkdir -p /usr/share/rpikernelhack

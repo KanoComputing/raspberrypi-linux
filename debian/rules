@@ -9,7 +9,8 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-PACKAGE = $(firstword $(shell dh_listpackages))
+ALL_PACKAGES = $(shell dh_listpackages)
+PACKAGE = $(firstword $(ALL_PACKAGES))
 TMP     = $(CURDIR)/debian/$(PACKAGE)
 
 %:
@@ -22,9 +23,64 @@ override_dh_auto_build:
 override_dh_auto_install:
 	make INSTALL_MOD_PATH=$(TMP) modules_install
 	mkdir -p $(TMP)/boot
-	cp arch/arm/boot/Image $(TMP)/boot/kernel.img
+	
+	$(eval KR := $(shell make -s kernelrelease))
+	install -m0644 arch/arm/boot/Image $(TMP)/boot/kernel-$(KR)
+	install -m0644 System.map $(TMP)/boot/System.map-$(KR)
+	install -m0644 .config $(TMP)/boot/config-$(KR)
 
 override_dh_auto_clean:
 	# FIXME: Clean fails with /usr/bin/xargs: rm: Argument list too long
 	# so it's currently disabled.
 	# https://bugs.launchpad.net/ubuntu/+source/qemu-linaro/+bug/1036645
+
+binary:
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	debian/rules override_dh_auto_install
+	dh_install
+	dh_installdocs
+	dh_installchangelogs
+	dh_installexamples
+	dh_installman
+	dh_installcatalogs
+	dh_installcron
+	dh_installdebconf
+	dh_installemacsen
+	dh_installifupdown
+	dh_installinfo
+	dh_installinit
+	dh_installmenu
+	dh_installmime
+	dh_installmodules
+	dh_installlogcheck
+	dh_installlogrotate
+	dh_installpam
+	dh_installppp
+	dh_installudev
+	dh_installwm
+	dh_installxfonts
+	dh_bugfiles
+	dh_lintian
+	dh_gconf
+	dh_icons
+	dh_perl
+	dh_usrlocal
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_strip
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	
+	# Replace #KERNEL_RELEAS# with the actual version in any control files
+	$(eval KR = $(shell make -s kernelrelease))
+	for pkg in $(ALL_PACKAGES); do \
+	    sed -i -e 's/#KERNEL_RELEASE#/$(KR)/' debian/$$pkg/DEBIAN/*; \
+	done
+	
+	dh_builddeb
