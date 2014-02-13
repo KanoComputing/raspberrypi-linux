@@ -11,10 +11,8 @@ for FN in $FILES; do
 done
 
 if [ -n "`grep '^kernel=' /boot/config.txt`" ]; then
-    echo "SED"
     sed -ir 's/kernel=.+/kernel=kernel-'$KERNELRELEASE'/' /boot/config.txt
 else
-    echo "APPEND"
     echo "kernel=kernel-$KERNELRELEASE" >> /boot/config.txt
 fi
 
