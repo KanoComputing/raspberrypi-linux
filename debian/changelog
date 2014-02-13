@@ -1,3 +1,9 @@
+raspberrypi-linux (3.12.9-4) unstable; urgency=low
+
+  * Package rebuilt, updated to revision ba30fcb8.
+
+ -- Team Kano <dev@kano.me>  Thu, 13 Feb 2014 13:17:17 +0000
+
 raspberrypi-linux (3.12.9-3.1) unstable; urgency=low
 
   * Non-maintainer upload.
