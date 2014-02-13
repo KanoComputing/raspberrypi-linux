@@ -1,3 +1,10 @@
+raspberrypi-linux (3.12.9-3.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Package rebuilt, updated to revision e6a5164c.
+
+ -- Team Kano <dev@kano.me>  Wed, 12 Feb 2014 19:09:57 +0000
+
 raspberrypi-linux (3.12.9-3) unstable; urgency=low
 
   * Putting the kernel hack back in place.
