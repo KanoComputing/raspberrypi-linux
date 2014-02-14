@@ -18,7 +18,7 @@ TMP     = $(CURDIR)/debian/$(PACKAGE)
 
 override_dh_auto_build:
 	cp config-rpi .config
-	make Image modules
+	make -j10 Image modules
 
 override_dh_auto_install:
 	make INSTALL_MOD_PATH=$(TMP) modules_install
