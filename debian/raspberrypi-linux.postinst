@@ -3,7 +3,7 @@ KERNELRELEASE="#KERNEL_RELEASE#"
 FILES="kernel-$KERNELRELEASE config-$KERNELRELEASE System.map-$KERNELRELEASE"
 
 for FN in $FILES; do
-  # Need to rm first to avoid error "rename involves overwriting ... with 
+  # Need to rm first to avoid error "rename involves overwriting ... with
   # different file ..., not allowed
   rm -f /boot/$FN
   dpkg-divert --package rpikernelhack --remove --rename /boot/$FN
@@ -11,7 +11,7 @@ for FN in $FILES; do
 done
 
 if [ -n "`grep '^kernel=' /boot/config.txt`" ]; then
-    sed -ir 's/kernel=.+/kernel=kernel-'$KERNELRELEASE'/' /boot/config.txt
+    sed -ir 's/kernel=.\+/kernel=kernel-'$KERNELRELEASE'/' /boot/config.txt
 else
     echo "kernel=kernel-$KERNELRELEASE" >> /boot/config.txt
 fi
