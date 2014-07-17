@@ -1,3 +1,9 @@
+raspberrypi-linux (3.12.24-1) unstable; urgency=low
+
+  * Rebasing on 3.12.24.
+
+ -- Radek Pazdera <radek@kano.me>  Thu, 17 Jul 2014 12:33:34 +0001
+
 raspberrypi-linux (3.12.9-3) unstable; urgency=low
 
   * Putting the kernel hack back in place.
