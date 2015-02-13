@@ -25,7 +25,7 @@ override_dh_auto_install:
 	mkdir -p $(TMP)/boot
 	
 	$(eval KR := $(shell make -s kernelrelease))
-	install -m0644 arch/arm/boot/Image $(TMP)/boot/kernel-$(KR)
+	install -m0644 arch/arm/boot/Image $(TMP)/boot/kernel.img
 	install -m0644 System.map $(TMP)/boot/System.map-$(KR)
 	install -m0644 .config $(TMP)/boot/config-$(KR)
 
@@ -77,7 +77,7 @@ binary:
 	dh_gencontrol
 	dh_md5sums
 	
-	# Replace #KERNEL_RELEAS# with the actual version in any control files
+	# Replace #KERNEL_RELEASE# with the actual version in any control files
 	$(eval KR = $(shell make -s kernelrelease))
 	for pkg in $(ALL_PACKAGES); do \
 	    sed -i -e 's/#KERNEL_RELEASE#/$(KR)/' debian/$$pkg/DEBIAN/*; \

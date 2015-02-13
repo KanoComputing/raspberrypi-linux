@@ -1,6 +1,6 @@
 #!/bin/sh -e
 KERNELRELEASE="#KERNEL_RELEASE#"
-FILES="kernel-$KERNELRELEASE config-$KERNELRELEASE System.map-$KERNELRELEASE"
+FILES="kernel.img config-$KERNELRELEASE System.map-$KERNELRELEASE"
 
 for FN in $FILES; do
   # Need to rm first to avoid error "rename involves overwriting ... with
@@ -10,10 +10,9 @@ for FN in $FILES; do
   sync
 done
 
+# Remove the kernel config line if there's any
 if [ -n "`grep '^kernel=' /boot/config.txt`" ]; then
-    sed -ir 's/kernel=.\+/kernel=kernel-'$KERNELRELEASE'/' /boot/config.txt
-else
-    echo "kernel=kernel-$KERNELRELEASE" >> /boot/config.txt
+    sed -ir '/kernel=.\+/d' /boot/config.txt
 fi
 
 #DEBHELPER#

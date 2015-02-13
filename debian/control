@@ -9,6 +9,8 @@ Package: raspberrypi-linux
 Architecture: armhf
 Depends: ${shlibs:Depends}, ${misc:Depends}, libraspberrypi0
 Conflicts: cgroup-bin, libcgroup1
+Replaces: raspberrypi-firmware (<< 1.20150212-2)
+Breaks: raspberrypi-firmware (<< 1.20150212-2)
 Description: Linux Kernel for the Raspberry Pi
  This package contains the Linux kernel compiled and optimised to run on
  the Raspberry Pi board.
