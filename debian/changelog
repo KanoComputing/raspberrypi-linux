@@ -1,3 +1,9 @@
+raspberrypi-linux (3.12.24-2) unstable; urgency=low
+
+  * Removing dependency on the bootloader
+
+ -- Radek Pazdera <radek@kano.me>  Thu, 9 Apr 2015 16:18:00 +0000
+
 raspberrypi-linux (3.12.24-1) unstable; urgency=low
 
   * Rebasing on 3.12.24.

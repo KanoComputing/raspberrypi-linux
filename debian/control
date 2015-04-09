@@ -7,10 +7,10 @@ Build-Depends: debhelper (>=9.0.0), quilt, gcc, make, perl
 
 Package: raspberrypi-linux
 Architecture: armhf
-Depends: ${shlibs:Depends}, ${misc:Depends}, libraspberrypi0
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Conflicts: cgroup-bin, libcgroup1
-Replaces: raspberrypi-firmware (<< 1.20150212-2)
-Breaks: raspberrypi-firmware (<< 1.20150212-2)
+Replaces: raspberrypi-firmware (<< 2.20150409-1)
+Breaks: raspberrypi-firmware (<< 2.20150409-1)
 Description: Linux Kernel for the Raspberry Pi
  This package contains the Linux kernel compiled and optimised to run on
  the Raspberry Pi board.
