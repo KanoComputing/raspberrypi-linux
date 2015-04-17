@@ -1,19 +1,11 @@
-Source: raspberrypi-linux
+Source: raspberrypi-linux7
 Maintainer: Radek Pazdera <radek@kano.me>
 Section: kernel
 Priority: extra
 Standards-Version: 3.9.4
 Build-Depends: debhelper (>=9.0.0), quilt, gcc, make, perl
 
-Package: raspberrypi-linux-common
-Architecture: armhf
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Replaces: raspberrypi-bootloader (<< 2.20150415-1), raspberrypi-linux (<< 3.18.11-1)
-Breaks: raspberrypi-bootloader (<< 2.20150415-1), raspberrypi-linux (<< 3.18.11-1)
-Description: Linux Kernel shared parts.
- The common files shared between kernel images.
-
-Package: raspberrypi-linux
+Package: raspberrypi-linux7
 Architecture: armhf
 Depends: ${shlibs:Depends}, ${misc:Depends}, raspberrypi-linux-common (>= ${source:Upstream-Version})
 Conflicts: cgroup-bin, libcgroup1

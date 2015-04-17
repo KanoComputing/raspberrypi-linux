@@ -11,23 +11,21 @@
 
 ALL_PACKAGES = $(shell dh_listpackages)
 PACKAGE = $(firstword $(ALL_PACKAGES))
-IMAGE   = $(CURDIR)/debian/raspberrypi-linux
-COMMON  = $(CURDIR)/debian/raspberrypi-linux-common
-IMGNAME = kernel.img
+IMAGE   = $(CURDIR)/debian/raspberrypi-linux7
+IMGNAME = kernel7.img
 
 %:
 	dh $@
 
 override_dh_auto_build:
-	cp kano-os-armv6-config .config
+	cp kano-os-armv7-config .config
 	make -j10 Image modules
-	make dtbs bcm2708-rpi-b.dtb bcm2708-rpi-b-plus.dtb #bcm2709-rpi-2-b.dtb
+	make dtbs bcm2709-rpi-2-b.dtb
 	./scripts/rpi-mkknlimg arch/arm/boot/Image arch/arm/boot/Image-tr
 
 override_dh_auto_install:
-	mkdir -p $(COMMON)/lib/firmware
 	make INSTALL_MOD_PATH=$(IMAGE) \
-	     INSTALL_FW_PATH=$(COMMON)/lib/firmware \
+	     INSTALL_FW_PATH=/tmp/discarded \
 	     modules_install
 
 	mkdir -p $(IMAGE)/boot
@@ -36,12 +34,9 @@ override_dh_auto_install:
 	install -m0644 System.map $(IMAGE)/boot/System.map-$(KR)
 	install -m0644 .config $(IMAGE)/boot/config-$(KR)
 	
-	install -m0644 arch/arm/boot/dts/bcm2708-rpi-b.dtb $(IMAGE)/boot/
-	install -m0644 arch/arm/boot/dts/bcm2708-rpi-b-plus.dtb $(IMAGE)/boot/
-	#install -m0644 arch/arm/boot/dts/bcm2709-rpi-2-b.dtb $(IMAGE)/boot/
-	
-	mkdir -p $(COMMON)/boot/overlays
-	install -m0644 arch/arm/boot/dts/*-overlay.dtb $(COMMON)/boot/overlays
+	#install -m0644 arch/arm/boot/dts/bcm2708-rpi-b.dtb $(IMAGE)/boot/
+	#install -m0644 arch/arm/boot/dts/bcm2708-rpi-b-plus.dtb $(IMAGE)/boot/
+	install -m0644 arch/arm/boot/dts/bcm2709-rpi-2-b.dtb $(IMAGE)/boot/
 
 override_dh_auto_clean:
 	# FIXME: Clean fails with /usr/bin/xargs: rm: Argument list too long
@@ -91,7 +86,7 @@ binary:
 	dh_gencontrol
 	dh_md5sums
 	
-	$(eval DTBS := bcm2708-rpi-b.dtb bcm2708-rpi-b-plus.dtb)
+	$(eval DTBS := bcm2709-rpi-2-b.dtb)
 	$(eval COMMON_DTBS := $(shell (cd arch/arm/boot/dts/ && ls *-overlay.dtb)))
 	
 	# Replace #KERNEL_RELEASE# with the actual version in any control files
