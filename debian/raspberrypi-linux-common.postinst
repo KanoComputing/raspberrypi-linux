@@ -1,0 +1,13 @@
+#!/bin/sh -e
+KERNELRELEASE="#KERNEL_RELEASE#"
+FILES="#COMMON_DTBS#"
+
+for FN in $FILES; do
+  # Need to rm first to avoid error "rename involves overwriting ... with
+  # different file ..., not allowed
+  rm -f /boot/overlays/$FN
+  dpkg-divert --package rpikernelhack --remove --rename /boot/overlays/$FN
+  sync
+done
+
+#DEBHELPER#

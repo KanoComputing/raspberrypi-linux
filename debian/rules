@@ -1,0 +1,106 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+# Sample debian/rules that uses debhelper.
+# This file was originally written by Joey Hess and Craig Small.
+# As a special exception, when this file is copied by dh-make into a
+# dh-make output file, you may use that output file without restriction.
+# This special exception was added by Craig Small in version 0.37 of dh-make.
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+ALL_PACKAGES = $(shell dh_listpackages)
+PACKAGE = $(firstword $(ALL_PACKAGES))
+IMAGE   = $(CURDIR)/debian/raspberrypi-linux
+COMMON  = $(CURDIR)/debian/raspberrypi-linux-common
+IMGNAME = kernel.img
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	cp kano-os-armv6-config .config
+	make -j10 Image modules
+	make dtbs bcm2708-rpi-b.dtb bcm2708-rpi-b-plus.dtb #bcm2709-rpi-2-b.dtb
+	./scripts/rpi-mkknlimg arch/arm/boot/Image arch/arm/boot/Image-tr
+
+override_dh_auto_install:
+	mkdir -p $(COMMON)/lib/firmware
+	make INSTALL_MOD_PATH=$(IMAGE) \
+	     INSTALL_FW_PATH=$(COMMON)/lib/firmware \
+	     modules_install
+
+	mkdir -p $(IMAGE)/boot
+	$(eval KR := $(shell make -s kernelrelease))
+	install -m0644 arch/arm/boot/Image-tr $(IMAGE)/boot/$(IMGNAME)
+	install -m0644 System.map $(IMAGE)/boot/System.map-$(KR)
+	install -m0644 .config $(IMAGE)/boot/config-$(KR)
+	
+	install -m0644 arch/arm/boot/dts/bcm2708-rpi-b.dtb $(IMAGE)/boot/
+	install -m0644 arch/arm/boot/dts/bcm2708-rpi-b-plus.dtb $(IMAGE)/boot/
+	#install -m0644 arch/arm/boot/dts/bcm2709-rpi-2-b.dtb $(IMAGE)/boot/
+	
+	mkdir -p $(COMMON)/boot/overlays
+	install -m0644 arch/arm/boot/dts/*-overlay.dtb $(COMMON)/boot/overlays
+
+override_dh_auto_clean:
+	# FIXME: Clean fails with /usr/bin/xargs: rm: Argument list too long
+	# so it's currently disabled.
+	# https://bugs.launchpad.net/ubuntu/+source/qemu-linaro/+bug/1036645
+
+binary:
+	dh_testroot
+	dh_prep
+	dh_installdirs
+	debian/rules override_dh_auto_install
+	dh_install
+	dh_installdocs
+	dh_installchangelogs
+	dh_installexamples
+	dh_installman
+	dh_installcatalogs
+	dh_installcron
+	dh_installdebconf
+	dh_installemacsen
+	dh_installifupdown
+	dh_installinfo
+	dh_installinit
+	dh_installmenu
+	dh_installmime
+	dh_installmodules
+	dh_installlogcheck
+	dh_installlogrotate
+	dh_installpam
+	dh_installppp
+	dh_installudev
+	dh_installwm
+	dh_installxfonts
+	dh_bugfiles
+	dh_lintian
+	dh_gconf
+	dh_icons
+	dh_perl
+	dh_usrlocal
+	dh_link
+	dh_compress
+	dh_fixperms
+	dh_strip
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	
+	$(eval DTBS := bcm2708-rpi-b.dtb bcm2708-rpi-b-plus.dtb)
+	$(eval COMMON_DTBS := $(shell (cd arch/arm/boot/dts/ && ls *-overlay.dtb)))
+	
+	# Replace #KERNEL_RELEASE# with the actual version in any control files
+	$(eval KR = $(shell make -s kernelrelease))
+	for pkg in $(ALL_PACKAGES); do \
+	    sed -i -e 's/#KERNEL_RELEASE#/$(KR)/' debian/$$pkg/DEBIAN/*; \
+	    sed -i -e 's/#KERNEL_IMAGE#/$(IMGNAME)/' debian/$$pkg/DEBIAN/*; \
+	    sed -i -e 's/#DTBS#/$(DTBS)/' debian/$$pkg/DEBIAN/*; \
+	    sed -i -e 's/#COMMON_DTBS#/$(COMMON_DTBS)/' debian/$$pkg/DEBIAN/*; \
+	done
+	
+	dh_builddeb

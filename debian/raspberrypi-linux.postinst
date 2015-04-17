@@ -1,0 +1,19 @@
+#!/bin/sh -e
+KERNELRELEASE="#KERNEL_RELEASE#"
+DTBS="#DTBS#"
+FILES="#KERNEL_IMAGE# config-$KERNELRELEASE System.map-$KERNELRELEASE $DTBS"
+
+for FN in $FILES; do
+  # Need to rm first to avoid error "rename involves overwriting ... with
+  # different file ..., not allowed
+  rm -f /boot/$FN
+  dpkg-divert --package rpikernelhack --remove --rename /boot/$FN
+  sync
+done
+
+# Remove the kernel config line if there's any
+if [ -n "`grep '^kernel=' /boot/config.txt`" ]; then
+    sed -ir '/kernel=.\+/d' /boot/config.txt
+fi
+
+#DEBHELPER#

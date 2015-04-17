@@ -1,0 +1,13 @@
+#!/bin/sh -e
+KERNELRELEASE="#KERNEL_RELEASE#"
+FILES="#COMMON_DTBS#"
+
+# dpkg-divert will error out otherwise
+mkdir -p /usr/share/rpikernelhack
+
+for FN in $FILES; do
+  dpkg-divert --package rpikernelhack --divert /usr/share/rpikernelhack/$FN \
+    /boot/overlays/$FN
+done
+
+#DEBHELPER#
