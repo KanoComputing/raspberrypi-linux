@@ -20,11 +20,11 @@
 
 
 /* Manufacturer */
-#define MFG_LNX1 'L'
-#define MFG_LNX2 'N'
-#define MFG_LNX3 'X'
+#define MFG_LNX1 'K'
+#define MFG_LNX2 'A'
+#define MFG_LNX3 'N'
 #define SERIAL 0
-#define YEAR 2012
+#define YEAR 2015
 #define WEEK 5
 
 /* EDID 1.3 standard definitions */
